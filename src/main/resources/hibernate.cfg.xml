@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+
+    <session-factory>
+        <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
+        <property name="connection.url">jdbc:mysql://127.0.0.1:3306/OSMP_NEW</property>
+        <property name="connection.username">root</property>
+        <property name="connection.password">atrovastatin</property>
+        <!--<property name="default_schema"></property>   -->
+        <property name="show_sql">true</property>
+        <property name="connection.pool_size">1</property>
+        <property name="dialect">org.hibernate.dialect.MySQL5InnoDBDialect</property>
+        <property name="current_session_context_class">thread</property>
+        <property name="hbm2ddl.auto">update</property>
+
+        <mapping class="ru.melpholan.entitty.Personal"/>
+        <mapping class="ru.melpholan.entitty.Adreses"/>
+        <mapping class="ru.melpholan.entitty.Contacts"/>
+        <mapping class="ru.melpholan.entitty.Professions"/>
+        <mapping class="ru.melpholan.entitty.reports.DailyDoctorsReport"/>
+        <mapping class="ru.melpholan.entitty.reports.TypeOfDoctorsCalls"/>
+
+
+    </session-factory>
+
+</hibernate-configuration>
