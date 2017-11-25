@@ -10,6 +10,7 @@ import ru.melpholan.DAO.Impl.ProfessionDAOImpl;
 import ru.melpholan.DAO.Impl.ProfessionException;
 import ru.melpholan.DAO.PersonalDAO;
 import ru.melpholan.DAO.ProfessionDAO;
+import ru.melpholan.exceptions.PersonalBuisnesException;
 import ru.melpholan.utils.HibernateUtil;
 
 import java.sql.SQLException;
@@ -26,23 +27,50 @@ public class Main {
         sessionFactory = HibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         PersonalDAO personalDAO = new PersonalDAOImpl();
+        ProfessionDAO professionDAO = new ProfessionDAOImpl();
+        professionDAO.setSession(session);
         personalDAO.setSession(session);
 
-        Transaction tx = session.beginTransaction();
+        String[] str = {"doctor", "feldsher","headDoctor","dispatcher"};
 
-        Professions pr = new Professions();
-        pr.setProfessionName("feldsher");
-        Personal ps = new Personal();
-        ps.setName("Akulenko");
-        ps.setSurname("Denis");
-        ps.setProfession(pr);
-        System.out.println(ps);
+        Transaction tx = session.beginTransaction();
+        for (String s: str
+             ) {
+            Professions p = new Professions();
+            p.setProfessionName(s);
+            session.save(p);
+        }
+
+        Professions pr = professionDAO.getProfessionByName("doctor");
+        System.out.println(pr);
+
 
         try {
-            personalDAO.delete(ps);
+            personalDAO.addPersonal("Никитми", "Denis", "andr",
+                    new Date("12/12/1979"),new Date("09/01/2005"), new Date("07/12/207"),pr);
+        } catch (PersonalBuisnesException e) {
+            e.printStackTrace();
+        }
+
+        Personal ps = new Personal();
+        ps.setBirthsday(new Date("09/01/2005"));
+        ps.setName("DOe");
+        ps.setSurname("JohN");
+        ps.setLastDateOfWorkLicense(new Date("09/01/2005"));
+        ps.setDateOfEmployment(new Date("09/01/2005"));
+        ps.setProfession(pr);
+
+        try {
+            personalDAO.save(ps);
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+
+        System.out.println("DONE");
+
+
+
 
 
       /*  ProfessionDAO pd = new ProfessionDAOImpl();

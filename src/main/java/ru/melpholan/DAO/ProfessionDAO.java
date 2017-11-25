@@ -18,5 +18,7 @@ public interface ProfessionDAO {
 
     void addProfession(String professionName) throws SQLException, ProfessionException;
 
+    Professions getProfessionByName(String professionName);
+
     void deleteProfession(String professionName) throws SQLException;
 }

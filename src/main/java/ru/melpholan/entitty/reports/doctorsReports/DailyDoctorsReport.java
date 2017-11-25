@@ -1,12 +1,10 @@
-package ru.melpholan.entitty.reports;
+package ru.melpholan.entitty.reports.doctorsReports;
 
 import ru.melpholan.entitty.Personal;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 @Table(name = "DailyDoctorsReport")

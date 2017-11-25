@@ -6,7 +6,9 @@ import ru.melpholan.DAO.PersonalDAO;
 import ru.melpholan.entitty.Adreses;
 import ru.melpholan.entitty.Personal;
 import ru.melpholan.entitty.Professions;
+import ru.melpholan.exceptions.PersonalBuisnesException;
 
+import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
@@ -14,19 +16,21 @@ import java.util.List;
 public class PersonalDAOImpl implements PersonalDAO {
 
 
-    private  Session session;
+    private  static Session session;
 
     public Session getSession() {
         return session;
     }
 
-    public void setSession(Session session) {
+    public  void setSession(Session sessionn) {
 
-        this.session = session;
+        session = sessionn;
 
     }
 
-    public void addPersonal(String name, String surname, String patronymic, Date birthsday, Date lastDateOfWorkLicense, Date dateOfEmployment, Professions profession) {
+    public void addPersonal(String name, String surname, String patronymic, Date birthsday,
+                            Date lastDateOfWorkLicense, Date dateOfEmployment, Professions profession) throws PersonalBuisnesException {
+
         Personal p = new Personal();
         p.setName(name);
         p.setSurname(surname);
@@ -35,8 +39,22 @@ public class PersonalDAOImpl implements PersonalDAO {
         p.setDateOfEmployment(dateOfEmployment);
         p.setBirthsday(birthsday);
         p.setProfession(profession);
-        p.setProfession(profession);
+
+        Personal result = getExistedPersonal(name, surname, birthsday, profession);
+
+        if(result != null){
+            throw new PersonalBuisnesException("This Personal already exist");
+        }
         session.save(p);
+    }
+
+    public Personal getExistedPersonal(String name, String surname, Date birthsday, Professions profession) {
+        Query query = session.createQuery("from Personal pe where pe.name = :peName and pe.surname =:peSurname and pe.birthsday = :peBday and pe.profession = :peProf");
+        query.setParameter("peName", name);
+        query.setParameter("peSurname", surname);
+        query.setParameter("peBday", birthsday);
+        query.setParameter("peProf", profession);
+        return (Personal) query.uniqueResult();
     }
 
     public List<Personal> findAll() {
@@ -62,8 +80,9 @@ public class PersonalDAOImpl implements PersonalDAO {
         return (Adreses) query.uniqueResult();
     }
 
-    public Personal save(Personal personal) throws SQLException {
-        return null;
+    public Serializable save(Personal personal) throws SQLException {
+        Serializable save = session.save(personal);
+        return save;
     }
 
 

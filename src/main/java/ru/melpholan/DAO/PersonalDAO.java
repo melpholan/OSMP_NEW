@@ -4,7 +4,9 @@ import org.hibernate.Session;
 import ru.melpholan.entitty.Adreses;
 import ru.melpholan.entitty.Personal;
 import ru.melpholan.entitty.Professions;
+import ru.melpholan.exceptions.PersonalBuisnesException;
 
+import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
@@ -15,7 +17,8 @@ public interface PersonalDAO {
     void setSession(Session session);
 
     //add Personal
-    void addPersonal(String name, String surname, String patronymic, Date birthsday, Date lastDateOfWorkLicense, Date dateOfEmployment, Professions profession);
+    void addPersonal(String name, String surname, String patronymic, Date birthsday,
+                     Date lastDateOfWorkLicense, Date dateOfEmployment, Professions profession) throws PersonalBuisnesException;
 
     //find all Personal by profession
     List<Personal> findAllByProfession(String profName);
@@ -30,7 +33,7 @@ public interface PersonalDAO {
     Personal findById(Long id) throws SQLException;
     //Insert or update Personal
 
-    Personal save(Personal personal) throws SQLException;
+    Serializable save(Personal personal) throws SQLException;
     // delete Personal
 
     void delete(Personal personal)throws SQLException;

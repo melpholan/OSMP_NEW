@@ -6,7 +6,7 @@
 
     <session-factory>
         <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
-        <property name="connection.url">jdbc:mysql://127.0.0.1:3306/OSMP_NEW</property>
+        <property name="connection.url">jdbc:mysql://127.0.0.1:3306/OSMP_NEW?useUnicode=true&amp;characterEncoding=utf8</property>
         <property name="connection.username">root</property>
         <property name="connection.password">atrovastatin</property>
         <!--<property name="default_schema"></property>   -->
@@ -15,13 +15,19 @@
         <property name="dialect">org.hibernate.dialect.MySQL5InnoDBDialect</property>
         <property name="current_session_context_class">thread</property>
         <property name="hbm2ddl.auto">update</property>
+        
 
         <mapping class="ru.melpholan.entitty.Personal"/>
         <mapping class="ru.melpholan.entitty.Adreses"/>
         <mapping class="ru.melpholan.entitty.Contacts"/>
         <mapping class="ru.melpholan.entitty.Professions"/>
-        <mapping class="ru.melpholan.entitty.reports.DailyDoctorsReport"/>
-        <mapping class="ru.melpholan.entitty.reports.TypeOfDoctorsCalls"/>
+        <mapping class="ru.melpholan.entitty.Vacations"/>
+        <mapping class="ru.melpholan.entitty.Grafik"/>
+        <mapping class="ru.melpholan.entitty.TypeOfShift"/>
+        <mapping class="ru.melpholan.entitty.reports.doctorsReports.DailyDoctorsReport"/>
+        <mapping class="ru.melpholan.entitty.reports.doctorsReports.TypeOfDoctorsCalls"/>
+        <mapping class="ru.melpholan.entitty.reports.doctorsReports.SubtypeOfDoctorsCalls"/>
+        <mapping class="ru.melpholan.entitty.reports.doctorsReports.QuantityOfCalls"/>
 
 
     </session-factory>

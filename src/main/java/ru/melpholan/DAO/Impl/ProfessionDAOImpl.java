@@ -21,25 +21,34 @@ public class ProfessionDAOImpl implements ProfessionDAO {
         this.session = session;
     }
 
+    //get all Professions
     public List<Professions> professionsList() {
         return session.createQuery("from Professions p").list();
     }
 
+    //add Profession
     public void addProfession(String newProfessionName) throws SQLException, ProfessionException {
 
-        List<Professions> professions = professionsList();
-        Professions newProfession = new Professions();
-        newProfession.setProfessionName(newProfessionName);
+        Query query = session.createQuery("from Professions pr where professionName = :prName");
+        query.setParameter("prName", newProfessionName);
+        Professions result = (Professions)query.uniqueResult();
 
-        for (Professions pr: professions
-             ) {
-            if(pr.equals(newProfession)){
-                throw new ProfessionException("This Profession already exist");
-            }
+        if(result != null){
+            throw new ProfessionException("This Profession already exist");
         }
-
-        session.save(newProfession);
+        Professions professions = new Professions();
+        professions.setProfessionName(newProfessionName);
+        session.save(professions);
     }
+
+    //get Profession by Name
+    public Professions getProfessionByName(String professionName) {
+        Query query = session.createQuery("from Professions pr where pr.professionName = :prName");
+        query.setParameter("prName", professionName);
+        Professions result = (Professions)query.uniqueResult();
+        return result;
+    }
+
 
     public void deleteProfession(String professionName) throws SQLException {
 

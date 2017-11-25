@@ -1,7 +1,6 @@
-package ru.melpholan.entitty.reports;
+package ru.melpholan.entitty.reports.doctorsReports;
 
 import javax.persistence.*;
-import javax.persistence.criteria.CriteriaBuilder;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
@@ -18,6 +17,8 @@ public class TypeOfDoctorsCalls implements Serializable {
     @Column(name = "ddr_name_of_type_calls")
     private String nameOfCallsTypes;
 
+
+    //mapping to DailyDoctorsReports
     @OneToMany(mappedBy = "typeOfDoctorsCalls")
     private Set<DailyDoctorsReport> dailyDoctorsReports = new HashSet<DailyDoctorsReport>();
 
@@ -34,8 +35,30 @@ public class TypeOfDoctorsCalls implements Serializable {
         dailyDoctorsReports.add(report);
     }
 
+
+    // mapping to SubtypeOfDoctorsCalls
+    @OneToMany(mappedBy = "typeOfDoctorsCalls")
+    private Set<SubtypeOfDoctorsCalls> subtypeOfDoctorsCalls = new HashSet<SubtypeOfDoctorsCalls>();
+
+    public Set<SubtypeOfDoctorsCalls> getSubtypeOfDoctorsCalls() {
+        return subtypeOfDoctorsCalls;
+    }
+
+    public void setSubtypeOfDoctorsCalls(Set<SubtypeOfDoctorsCalls> subtypeOfDoctorsCalls) {
+        this.subtypeOfDoctorsCalls = subtypeOfDoctorsCalls;
+    }
+
+    public void addSubtypeOfDoctorsCalls(SubtypeOfDoctorsCalls subtype){
+        subtype.setTypeOfDoctorsCalls(this);
+        this.subtypeOfDoctorsCalls.add(subtype);
+    }
+
+
+    // constructor without parameters
     public TypeOfDoctorsCalls(){}
 
+
+    //getters and setters
     public Integer getIdCalls() {
         return idCalls;
     }
@@ -52,24 +75,25 @@ public class TypeOfDoctorsCalls implements Serializable {
         this.nameOfCallsTypes = nameOfCallsTypes;
     }
 
+
+
+    // hash and equals
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof TypeOfDoctorsCalls)) return false;
 
         TypeOfDoctorsCalls that = (TypeOfDoctorsCalls) o;
 
-        if (!getIdCalls().equals(that.getIdCalls())) return false;
         return getNameOfCallsTypes().equals(that.getNameOfCallsTypes());
     }
 
     @Override
     public int hashCode() {
-        int result = getIdCalls().hashCode();
-        result = 31 * result + getNameOfCallsTypes().hashCode();
-        return result;
+        return getNameOfCallsTypes().hashCode();
     }
 
+    // toString
     @Override
     public String toString() {
         return "TypeOfDoctorsCalls{" +

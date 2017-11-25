@@ -1,6 +1,6 @@
 package ru.melpholan.entitty;
 
-import ru.melpholan.entitty.reports.DailyDoctorsReport;
+import ru.melpholan.entitty.reports.doctorsReports.DailyDoctorsReport;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -42,8 +42,9 @@ public class Personal implements Serializable {
     @Column(name = "p_date_of_dismissal")
     private Date dateOfDimissal;
 
+
     //mapping to Profession
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "Professions_idProfessions", referencedColumnName = "idProfessions")
     private Professions profession;
 
@@ -55,11 +56,23 @@ public class Personal implements Serializable {
         this.profession = profession;
     }
 
-    // TODO: 23.11.17  write get set methods
+
     //mapping to DailyDoctorsReport
     @OneToMany(mappedBy = "personal")
     private Set<DailyDoctorsReport> reports;
 
+    public void setReports(Set<DailyDoctorsReport> reports) {
+        this.reports = reports;
+    }
+
+    public Set<DailyDoctorsReport> getReports() {
+        return this.reports;
+    }
+
+    public void addReports(DailyDoctorsReport doctorsReport){
+        doctorsReport.setPersonal(this);
+        this.reports.add(doctorsReport);
+    }
 
     //mapping to Address
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -74,6 +87,7 @@ public class Personal implements Serializable {
         this.adress = adress;
     }
 
+
     //mapping to Contacts
     @OneToMany(mappedBy = "personal", cascade = CascadeType.REMOVE)
     private Set<Contacts> contacts = new HashSet<Contacts>();
@@ -83,18 +97,55 @@ public class Personal implements Serializable {
     }
 
     public Set<Contacts> getContacts() {
-        return contacts;
+        return this.contacts;
     }
 
     public void addContacts(Contacts contact){
         contact.setPersonal(this);
-        contacts.add(contact);
+        this.contacts.add(contact);
     }
 
+
+    //mapping to Grafik
+    @OneToMany(mappedBy = "personal", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<Grafik> grafik = new HashSet<Grafik>();
+
+    public Set<Grafik> getGrafik(){
+        return this.grafik;
+    }
+
+    public void setGrafik(Set<Grafik> grafikSet){
+        this.grafik = grafikSet;
+    }
+
+    public void addGrafik(Grafik grafik){
+        grafik.setPersonal(this);
+        this.grafik.add(grafik);
+    }
+
+
+    // mapping to Vacations
+    @OneToMany(mappedBy = "personal")
+    private Set<Vacations> vacations = new HashSet<Vacations>();
+
+    public void setVacations(Set<Vacations> vacations) {
+        this.vacations = vacations;
+    }
+
+    public Set<Vacations> getVacations() {
+        return this.vacations;
+    }
+
+    public void addVacations(Vacations vacations){
+        vacations.setPersonal(this);
+        this.vacations.add(vacations);
+    }
+
+    //-----------------------------------------------------------//
     //constructor without parameters
     public Personal(){}
 
-
+    // getters and setters
     public Integer getIdPersonal() {
         return idPersonal;
     }
@@ -159,6 +210,7 @@ public class Personal implements Serializable {
         this.dateOfDimissal = dateOfDimissal;
     }
 
+    // toString
     @Override
     public String toString() {
         return "Personal{" +
